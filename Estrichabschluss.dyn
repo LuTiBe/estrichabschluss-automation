@@ -1,0 +1,989 @@
+{
+  "Uuid": "5b284f79-26f1-41db-9b94-1db600fce3dc",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "Estrichabschluss",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Point": {
+        "Key": "Autodesk.DesignScript.Geometry.Point",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Property": {
+        "Key": "AdvanceSteel.Nodes.Property",
+        "Value": "AdvanceSteelNodes.dll"
+      },
+      "List": {
+        "Key": "List",
+        "Value": "BuiltIn.ds"
+      },
+      "Plate": {
+        "Key": "AdvanceSteel.Nodes.Plates.Plate",
+        "Value": "AdvanceSteelNodes.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "oP = List.GetItemAtIndex(py_input, 0);\nxDP = List.GetItemAtIndex(py_input, 1);\nyDP = List.GetItemAtIndex(py_input, 2);\npy_propertys = List.GetItemAtIndex(py_input, 3);\n\nthickness = List.GetItemAtIndex(py_propertys, 0);\n\nprop_1 = Property.ByNameAndValue(\"Thickness\", thickness);\nprop_2 = Property.ByNameAndValue(\"Plate Portioning\", 1);\nproplist = [prop_1, prop_2];\n\nPlate.ByThreePoints(oP, xDP, yDP, proplist);",
+      "Id": "52d1b38f3ef043f8bd0282b823823180",
+      "Inputs": [
+        {
+          "Id": "95cc8e8311d2403fa4ad44a3ca116c6a",
+          "Name": "py_input",
+          "Description": "py_input",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f03fd63df70d46b195092dea5208e42d",
+          "Name": "",
+          "Description": "oP",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "20cb05f7a4c048aeba20e0e89409fc49",
+          "Name": "",
+          "Description": "xDP",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a9b2d0711993463c8b561f5e22122d5f",
+          "Name": "",
+          "Description": "yDP",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9627944220f74e5581c6861bb7c4dceb",
+          "Name": "",
+          "Description": "py_propertys",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0a46abf9cee6429cb11bedd6b6273372",
+          "Name": "",
+          "Description": "thickness",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2bbe6f894183493b98843c51ec941488",
+          "Name": "",
+          "Description": "prop_1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "efea158eb2c0416d98958d942cae7282",
+          "Name": "",
+          "Description": "prop_2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6d14bed606e647aa90f1cbb7e97d777c",
+          "Name": "",
+          "Description": "proplist",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "88afe4e298b442c899a103c950f4376b",
+          "Name": "",
+          "Description": "Wert des Ausdrucks in Zeile 12",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Ermöglicht die direkte Erstellung von DesignScript-Code."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Phython-Standard- und DesignScript-Bibliotheken laden\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Die Eingaben für diesen Block werden in Form einer Liste in den IN-Variablen gespeichert.\r\ndataEnteringNode = IN[0]\r\n\r\n# Code unterhalb dieser Linie platzieren\r\n\r\n# Initalisierung\r\norginPoint_list = []\r\nxDirectionPoint_list = []\r\nyDirectionPoint_list = []\r\nproperty_list = []\r\n\r\n\r\n\r\n\r\n# Klassen\r\nclass BKS:\r\n    def __init__(self):\r\n        self.cs = [0, 0, 0]\r\n\r\n    def set_to_world(self):\r\n        self.cs = [0, 0, 0]\r\n\r\n    def set_relativ(self, x=0, y=0, z=0):\r\n        self.cs[0] += x\r\n        self.cs[1] += y\r\n        self.cs[2] += z\r\n        return self.cs\r\n\r\n\r\nbks = BKS()\r\n\r\n\r\nclass Plate:\r\n    def __init__(self, length, width, thickness):\r\n        self.l = length\r\n        self.w = width\r\n        self.t = thickness\r\n        Plate.set_on_point(self, 0, 0, 0, 'mP')\r\n\r\n    def set_on_point(self, x, y, z, pos):\r\n        if pos == 'lP':\r\n            self.orginPoint = [x, y, z]\r\n            self.xDirectionPoint = [x, y, self.w + z]\r\n            self.yDirectionPoint = [x, -self.l + y, self.w + z]\r\n        elif pos == 'rP':\r\n            self.orginPoint = [x, y, z]\r\n            self.xDirectionPoint = [x, -self.l + y, z]\r\n            self.yDirectionPoint = [x, -self.l + y, self.w + z]\r\n        elif pos == 'mP':\r\n            self.orginPoint = [x, y, z]\r\n            self.xDirectionPoint = [self.l + x, y, z]\r\n            self.yDirectionPoint = [self.l + x, y, self.w + z]\r\n        elif pos == 'gP':\r\n            self.orginPoint = [x, y, z]\r\n            self.xDirectionPoint = [x, -self.l + y, z]\r\n            self.yDirectionPoint = [self.w + x, -self.l + y, z]\r\n       \r\n\r\n    def __repr__(self):\r\n        try:\r\n            return f'{self.l}x{self.w}x{self.t} \\n' \\\r\n                   f'CS: {self.orginPoint}{self.xDirectionPoint}{self.yDirectionPoint}'\r\n        except AttributeError:\r\n            return f'Fehler!: Platte hat noch keine Position'\r\n\r\n\r\nplate_a = Plate(400, 300, 6)\r\n\r\n\r\n\r\ndynamo = True\r\nif dynamo:\r\n    orginPoint_list.append(Point.ByCoordinates(plate_a.orginPoint[0], plate_a.orginPoint[1], plate_a.orginPoint[2]))\r\n    xDirectionPoint_list.append(Point.ByCoordinates(plate_a.xDirectionPoint[0], plate_a.xDirectionPoint[1], plate_a.xDirectionPoint[2]))\r\n    yDirectionPoint_list.append(Point.ByCoordinates(plate_a.yDirectionPoint[0], plate_a.yDirectionPoint[1], plate_a.yDirectionPoint[2]))\r\n\r\n\r\n\r\nclass Floor:\r\n    pass\r\n\r\n\r\n\r\n\r\n# Weisen Sie Ihre Ausgabe der OUT-Variablen zu.\r\n\r\nOUT = [orginPoint_list, xDirectionPoint_list, yDirectionPoint_list, property_list]\r\n",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "b318a227b0d44f00b7bd8308eb487215",
+      "Inputs": [
+        {
+          "Id": "cd3a33c42a524d64aca036d209f2c425",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "bdfbc56c4e3b4044adeef1090e0203d3",
+          "Name": "OUT",
+          "Description": "Ergebnis des Python-Skripts",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Führt ein eingebettetes Python-Skript aus."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Phython-Standard- und DesignScript-Bibliotheken laden\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Die Eingaben für diesen Block werden in Form einer Liste in den IN-Variablen gespeichert.\r\ndata_list = IN[0]\r\n\r\n# Code unterhalb dieser Linie platzieren\r\n\r\n# Initalisierung\r\ndynamo = True\r\n\r\norginPoint_list = []\r\nxDirectionPoint_list = []\r\nyDirectionPoint_list = []\r\nproperty_list = []\r\n\r\ncon_overhang = data_list[0][0]\r\nff_overhang = data_list[0][1]\r\nplate_t = data_list[0][2]\r\ngap_hor = data_list[0][3]\r\ngap_ver = data_list[0][4]\r\n\r\ndata_list.pop(0) # Lösche Grunddaten.\r\n\r\nfor floor in data_list: # None Einträge Löschen.\r\n    if None in floor or floor[3] == 0 or floor[4] == 0:\r\n        floor.clear()\r\nwhile [] in data_list:\r\n    data_list.remove([])\r\n\r\n# Klassen #######################################\r\nclass BKS:\r\n    def __init__(self):\r\n        self.cs = [0, 0, 0]\r\n\r\n    def set_to_world(self):\r\n        self.cs = [0, 0, 0]\r\n\r\n    def set_relativ(self, x=0, y=0, z=0):\r\n        self.cs[0] += x\r\n        self.cs[1] += y\r\n        self.cs[2] += z\r\n        return self.cs\r\n\r\n\r\nbks = BKS()\r\n\r\n\r\nclass Plate:\r\n    def __init__(self, length, width, thickness):\r\n        self.l = length\r\n        self.w = width\r\n        self.t = thickness\r\n        Plate.set_on_point(self, 0, 0, 0, 'mP')\r\n\r\n    def set_on_point(self, x, y, z, pos):\r\n        if pos == 'rP':\r\n            self.orginPoint = [x, y, z]\r\n            self.xDirectionPoint = [x, y, -self.w + z]\r\n            self.yDirectionPoint = [x, -self.l + y, -self.w + z]\r\n        elif pos == 'lP':\r\n            self.orginPoint = [x, y, z]\r\n            self.xDirectionPoint = [x, -self.l + y, z]\r\n            self.yDirectionPoint = [x, -self.l + y, -self.w + z]\r\n        elif pos == 'mP':\r\n            self.orginPoint = [self.l + x, y, z]\r\n            self.xDirectionPoint = [x, y, z]\r\n            self.yDirectionPoint = [x, y, -self.w + z]\r\n        elif pos == 'gP':\r\n            self.orginPoint = [x, y, z]\r\n            self.xDirectionPoint = [x, -self.l + y, z]\r\n            self.yDirectionPoint = [self.w + x, -self.l + y, z]\r\n\r\n    def __repr__(self):\r\n        try:\r\n            return f'{self.l}x{self.w}x{self.t} \\n' \\\r\n                   f'CS: {self.orginPoint}{self.xDirectionPoint}{self.yDirectionPoint}'\r\n        except AttributeError:\r\n            return f'Fehler!: Platte hat noch keine Position'\r\n\r\n# Funktionen #######################################\r\ndef write_dynamo_points(plate):\r\n    if dynamo:\r\n        p1 = plate.orginPoint[0]\r\n        p2 = plate.orginPoint[1]\r\n        p3 = plate.orginPoint[2]\r\n        orginPoint_list.append(Point.ByCoordinates(p1, p2, p3))\r\n\r\n        p1 = plate.xDirectionPoint[0]\r\n        p2 = plate.xDirectionPoint[1]\r\n        p3 = plate.xDirectionPoint[2]\r\n        xDirectionPoint_list.append(Point.ByCoordinates(p1, p2, p3))\r\n\r\n        p1 = plate.yDirectionPoint[0]\r\n        p2 = plate.yDirectionPoint[1]\r\n        p3 = plate.yDirectionPoint[2]\r\n        yDirectionPoint_list.append(Point.ByCoordinates(p1, p2, p3))\r\n    else:\r\n        orginPoint_list.append(plate.orginPoint)\r\n        xDirectionPoint_list.append(plate.xDirectionPoint)\r\n        yDirectionPoint_list.append(plate.yDirectionPoint)\r\n\r\nfloor_height = 0\r\nfor floor in data_list:\r\n\r\n    raw_height = floor[4] - floor[3]\r\n    plate_w = raw_height + ff_overhang + con_overhang\r\n    len_a = floor[0]\r\n    len_b = floor[1]\r\n    len_c = floor[2]\r\n    min_l = 0\r\n\r\n    if len_a > min_l: # Wenn Platte A Existiert\r\n        plate_a = Plate(len_a, plate_w, plate_t)\r\n        plate_a.set_on_point(0, 0, floor_height + ff_overhang, 'lP')\r\n        write_dynamo_points(plate_a)\r\n\r\n    if len_b > min_l: # Wenn Platte B Existiert\r\n        plate_b = Plate(len_b, plate_w, plate_t)\r\n        plate_b.set_on_point(0, 0, floor_height + ff_overhang, 'mP')\r\n        write_dynamo_points(plate_b)\r\n\r\n    if len_c > min_l: # Wenn Platte C Existiert\r\n        plate_c = Plate(len_c, plate_w, plate_t)\r\n        plate_c.set_on_point(len_b, 0, floor_height + ff_overhang, 'rP')\r\n        write_dynamo_points(plate_c)\r\n\r\nprint(orginPoint_list[0])\r\nprint(xDirectionPoint_list[0])\r\nprint(yDirectionPoint_list[0])\r\n\r\n#print(orginPoint_list, len(orginPoint_list))\r\n#print(xDirectionPoint_list, len(xDirectionPoint_list))\r\n#print(yDirectionPoint_list, len(yDirectionPoint_list))\r\n\r\n\r\n\r\n\r\n# Weisen Sie Ihre Ausgabe der OUT-Variablen zu.\r\n\r\nOUT = [orginPoint_list, xDirectionPoint_list, yDirectionPoint_list, property_list]",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "14282ee30e7044ae9877fde5332460cd",
+      "Inputs": [
+        {
+          "Id": "16751c2a774f486ca623d3972b14262a",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "59ba755c4eaa4d81a651ac8772977df8",
+          "Name": "OUT",
+          "Description": "Ergebnis des Python-Skripts",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Führt ein eingebettetes Python-Skript aus."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSOffice.Data.ImportExcel@var,string,bool,bool",
+      "Id": "d1c8f4a16b7c4187962a10e3ffae0816",
+      "Inputs": [
+        {
+          "Id": "a024fa2532d24d3594ce419a4666d7c7",
+          "Name": "file",
+          "Description": "Datei mit der Excel-Arbeitsmappe\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "54129b71a76f4e7689659d0879c4b4bb",
+          "Name": "sheetName",
+          "Description": "Name des Arbeitsblatts, das Daten enthält\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "eb1ce2d57d2e45c6bc790386b4acd434",
+          "Name": "readAsStrings",
+          "Description": "Lesen von Zellen als Zeichenfolgen ein/aus\n\nbool\nVorgabewert : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ab87c24005a14825ac52a236d3c78716",
+          "Name": "showExcel",
+          "Description": "Anzeigen des Excel-Hauptfensters ein/aus\n\nbool\nVorgabewert : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d0f0d83b0e9148b499e287f263fdf488",
+          "Name": "data",
+          "Description": "Zeilen mit Daten aus dem Excel-Arbeitsblatt",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Liest Daten aus einer Microsoft Excel-Tabelle. Daten werden nach Zeilen gelesen und in einer Reihe von Listen nach Zeilen ausgegeben. Zeilen und Spalten sind nullbasiert indiziert; Beispiel: Der Wert aus Zelle A1 erscheint in der Liste an Position [0,0]. Für diesen Knoten muss Microsoft Excel installiert sein.\n\nData.ImportExcel (file: var, sheetName: string, readAsStrings: bool = false, showExcel: bool = true): var[][]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
+      "HintPath": "\\\\s-app01\\SMT\\Projekte\\2023\\230072 Nägele Wohnbau BVH Baumgarten in Mäder\\01. Pläne intern\\31 15 53 - Estrichabschlüsse\\Aufmaß Estrichabschlüsse Haus_B.xlsx",
+      "InputValue": "\\\\s-app01\\SMT\\Projekte\\2023\\230072 Nägele Wohnbau BVH Baumgarten in Mäder\\01. Pläne intern\\31 15 53 - Estrichabschlüsse\\Aufmaß Estrichabschlüsse Haus_B.xlsx",
+      "NodeType": "ExtensionNode",
+      "Id": "9779abfee86c430283aea71d0d3f9b93",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f51d673c11ad4e28bfb87f2be4da5775",
+          "Name": "",
+          "Description": "Dateipfad",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Ermöglicht die Auswahl einer Datei auf dem System, um ihren Dateinamen abzurufen."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Dynamo_Tabelle",
+      "Id": "bbbbafee41b2460091fba15cd529ae8e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7cd2e4e6b8704d9597c238bc6500cbe1",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Erstellt eine Zeichenfolge."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.FileObject, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "0a766d89407d4bafa0a984467b5591b0",
+      "Inputs": [
+        {
+          "Id": "bb074ff5c8a74ca5adf266d5de2a92ae",
+          "Name": "path",
+          "Description": "Pfad zur Datei als Zeichenfolge.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "20421b9cedcd4d94b8ded839143becdf",
+          "Name": "file",
+          "Description": "Dateiobjekt",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Erstellt ein Dateiobjekt aus einem Pfad."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "cdce59c83b5a4f0ebae960e5df77177c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f5babb1cb18b47fa8f173173ecaf9e8d",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Auswahl zwischen True und False"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "dc6e6283b0e74203acf1846e41fb44d3",
+      "Inputs": [
+        {
+          "Id": "999346141c4241209f9b854759be2fe4",
+          "Name": "",
+          "Description": "Block, dessen Ausgabe angezeigt wird",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "1c6c32266e9b44ed84071e2e587b9cbe",
+          "Name": "",
+          "Description": "Blockausgabe",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualisierung der Ausgabe des Blocks"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "70344cecc71045c6ba21eeee64d83d33",
+      "Inputs": [
+        {
+          "Id": "a12a280702e4494487a10ec05471ca9f",
+          "Name": "",
+          "Description": "Block, dessen Ausgabe angezeigt wird",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "09e6a8c12bcf47d59d96f73b10b4c1c4",
+          "Name": "",
+          "Description": "Blockausgabe",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualisierung der Ausgabe des Blocks"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Phython-Standard- und DesignScript-Bibliotheken laden\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Die Eingaben für diesen Block werden in Form einer Liste in den IN-Variablen gespeichert.\r\ndata_list = IN[0]\r\n\r\n# Code unterhalb dieser Linie platzieren\r\n\r\n# Initalisierung\r\ndynamo = True\r\n\r\ncon_overhang = data_list[0][0]\r\nff_overhang = data_list[0][1]\r\nplate_t = data_list[0][2]\r\ngap_hor = data_list[0][3]\r\ngap_ver = data_list[0][4]\r\ne_max = data_list[0][5]\r\n\r\ncon_gr_pl_l = 200  # Console ground plate length\r\ncon_gr_pl_w = 150  # Console ground plate width\r\n\r\norginPoint_list = []\r\nxDirectionPoint_list = []\r\nyDirectionPoint_list = []\r\nproperty_list = [plate_t]\r\n\r\n# Bereinigung #######################################\r\n\r\ndata_list.pop(0) # Lösche Grunddaten.\r\n\r\nfor floor in data_list: # None Einträge Löschen. Stockwerke ohne Fußbodeneinträge löschen.\r\n    if None in floor or floor[3] == 0 or floor[4] == 0:\r\n        floor.clear()\r\nwhile [] in data_list:\r\n    data_list.remove([])\r\n\r\nfor floor in data_list:\r\n    while floor[-1] == 0:\r\n        floor.pop()\r\n\r\nif e_max < 300:     # Programm vor Absturz bewahren. (Zu kleine Zahl erhöht die Konsolenanzahl massiv)\r\n    e_max = 300\r\n\r\n# Classes #######################################\r\nclass Plate:\r\n    def __init__(self, length, width, thickness):\r\n        self.l = length\r\n        self.w = width\r\n        self.t = thickness\r\n        Plate.set_on_point(self, 0, 0, 0, 'mP')\r\n\r\n    def set_on_point(self, x, y, z, pos):\r\n        if pos == 'rP':\r\n            self.orginPoint = [x, y, z]\r\n            self.xDirectionPoint = [x, y, -self.w + z]\r\n            self.yDirectionPoint = [x, -self.l + y, -self.w + z]\r\n        elif pos == 'lP':\r\n            self.orginPoint = [x, y, z]\r\n            self.xDirectionPoint = [x, -self.l + y, z]\r\n            self.yDirectionPoint = [x, -self.l + y, -self.w + z]\r\n        elif pos == 'mP':\r\n            self.orginPoint = [self.l + x, y, z]\r\n            self.xDirectionPoint = [x, y, z]\r\n            self.yDirectionPoint = [x, y, -self.w + z]\r\n        elif pos == 'gP':\r\n            self.orginPoint = [x, self.l + y, z]\r\n            self.xDirectionPoint = [x, y, z]\r\n            self.yDirectionPoint = [self.w + x, y, z]\r\n\r\n    def __repr__(self):\r\n        try:\r\n            return f'{self.l}x{self.w}x{self.t} \\n' \\\r\n                   f'CS: {self.orginPoint}{self.xDirectionPoint}{self.yDirectionPoint}'\r\n        except AttributeError:\r\n            return f'Fehler!: Platte hat noch keine Position'\r\n\r\n# Functions #######################################\r\ndef write_dynamo_points(plate):\r\n    if dynamo:\r\n        p1 = plate.orginPoint[0]\r\n        p2 = plate.orginPoint[1]\r\n        p3 = plate.orginPoint[2]\r\n        orginPoint_list.append(Point.ByCoordinates(p1, p2, p3))\r\n\r\n        p1 = plate.xDirectionPoint[0]\r\n        p2 = plate.xDirectionPoint[1]\r\n        p3 = plate.xDirectionPoint[2]\r\n        xDirectionPoint_list.append(Point.ByCoordinates(p1, p2, p3))\r\n\r\n        p1 = plate.yDirectionPoint[0]\r\n        p2 = plate.yDirectionPoint[1]\r\n        p3 = plate.yDirectionPoint[2]\r\n        yDirectionPoint_list.append(Point.ByCoordinates(p1, p2, p3))\r\n    else:\r\n        orginPoint_list.append(plate.orginPoint)\r\n        xDirectionPoint_list.append(plate.xDirectionPoint)\r\n        yDirectionPoint_list.append(plate.yDirectionPoint)\r\n\r\ndef create_start_points(length, plate):\r\n    div_li = []\r\n    div = []\r\n    starter = 0\r\n\r\n    if length > 300:\r\n        if plate == 'b':\r\n            div = (length - 2 * 150) / ((length - 2 * 150) // e_max + 1)\r\n            starter = px_factor + 150\r\n        elif plate == 'c' or plate == 'a':\r\n            div = (length - 150) / ((length - 150) // e_max + 1)\r\n            starter = round(div, 2)\r\n        div_li = [starter]  # Liste mit Startpunkten für die Konsolen.\r\n\r\n        while div_li[-1] + div < length:\r\n            div_li.append(round(div_li[-1] + div, 2))\r\n    return div_li\r\n\r\n\r\n################## Main Function ##################\r\nfloor_height = 0\r\nfor floor in data_list:\r\n\r\n    raw_height = floor[4] - floor[3]\r\n    plate_w = raw_height + ff_overhang + con_overhang\r\n    len_a = floor[0] - gap_hor\r\n    len_b = floor[1] - gap_hor * 2\r\n    len_c = floor[2] - gap_hor\r\n    min_l = 0\r\n    existing = {'Plate_A': 0, 'Plate_B': 0, 'Plate_C': 0}\r\n\r\n    if len_a > min_l:\r\n        existing['Plate_A'] = 1\r\n    if len_b > min_l:\r\n        existing['Plate_B'] = 1\r\n    if len_c > min_l:\r\n        existing['Plate_C'] = 1\r\n\r\n    if existing['Plate_A']: # Wenn Platte A Existiert\r\n        # Platte A Erstellen.\r\n        plate_a = Plate(len_a, plate_w, plate_t)\r\n        plate_a.set_on_point(0, 0, floor_height + ff_overhang, 'lP')\r\n        write_dynamo_points(plate_a)\r\n\r\n        # Konsolen Erstellen.\r\n        for start_p in create_start_points(len_a, 'a'):\r\n            cp_h = Plate(con_gr_pl_w, con_gr_pl_l, plate_t)     # Umkehren der Platten Dimensionen um die Platte zu drehen.\r\n            cp_h.set_on_point(- con_gr_pl_l, -(start_p + con_gr_pl_w / 2), floor_height - raw_height + gap_ver, 'gP')\r\n            write_dynamo_points(cp_h)\r\n\r\n            cp_v = Plate(con_gr_pl_l - 20, raw_height - 80 - gap_ver - plate_t, plate_t)\r\n            cp_v.set_on_point(- (con_gr_pl_l - 20), -(start_p - cp_v.t / 2), floor_height - 80, 'mP')\r\n            write_dynamo_points(cp_v)\r\n\r\n    if existing['Plate_B']: # Wenn Platte B Existiert\r\n        l_factor = 0\r\n        px_factor = 0\r\n        if existing['Plate_A'] and existing['Plate_C']:\r\n            l_factor = plate_t * 2\r\n            px_factor = plate_t\r\n        elif existing['Plate_A']:\r\n            l_factor = plate_t\r\n            px_factor = plate_t\r\n        elif existing['Plate_C']:\r\n            l_factor = plate_t\r\n        len_b -= l_factor\r\n\r\n        # Platte B Erstellen.\r\n        plate_b = Plate(len_b, plate_w, plate_t)\r\n        plate_b.set_on_point(px_factor, 0, floor_height + ff_overhang, 'mP')\r\n        write_dynamo_points(plate_b)\r\n\r\n        # Konsolen Erstellen.\r\n        for start_p in create_start_points(len_b, 'b'):\r\n            cp_h = Plate(con_gr_pl_l, con_gr_pl_w, plate_t)\r\n            cp_h.set_on_point(start_p - cp_h.w / 2, 0, floor_height - raw_height + gap_ver, 'gP')\r\n            write_dynamo_points(cp_h)\r\n\r\n            cp_v = Plate(cp_h.l - 20, raw_height - 80 - gap_ver - plate_t, plate_t)\r\n            cp_v.set_on_point(start_p - plate_t / 2, cp_v.l, floor_height - 80, 'lP')\r\n            write_dynamo_points(cp_v)\r\n\r\n    if existing['Plate_C']: # Wenn Platte C Existiert\r\n        px_factor = 3000 # Fiktiver Wert wenn nur die Platte C existiert.\r\n        if existing['Plate_A'] and existing['Plate_B']:\r\n            px_factor = plate_t * 2 + len_b\r\n        elif existing['Plate_B']:\r\n            px_factor = len_b + plate_t\r\n\r\n        # Platte C Erstellen.\r\n        plate_c = Plate(len_c, plate_w, plate_t)\r\n        plate_c.set_on_point(px_factor, 0, floor_height + ff_overhang, 'rP')\r\n        write_dynamo_points(plate_c)\r\n\r\n        # Konsolen Erstellen.\r\n        for start_p in create_start_points(len_c, 'c'):\r\n            cp_h = Plate(con_gr_pl_w, con_gr_pl_l, plate_t)     # Umkehren der Platten Dimensionen um die Platte zu drehen.\r\n            cp_h.set_on_point(px_factor, -(start_p + con_gr_pl_w / 2), floor_height - raw_height + gap_ver, 'gP')\r\n            write_dynamo_points(cp_h)\r\n\r\n            cp_v = Plate(con_gr_pl_l - 20, raw_height - 80 - gap_ver - plate_t, plate_t)\r\n            cp_v.set_on_point(px_factor, -(start_p - cp_v.t / 2), floor_height - 80, 'mP')\r\n            write_dynamo_points(cp_v)\r\n\r\n    floor_height += 3000\r\n\r\n# Weisen Sie Ihre Ausgabe der OUT-Variablen zu.\r\n\r\nOUT = [orginPoint_list, xDirectionPoint_list, yDirectionPoint_list, property_list]\r\n",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "c49ca2cd0c594f97835dfe18cd51a33f",
+      "Inputs": [
+        {
+          "Id": "df1ed0284ae749af9e105b946b3d6821",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2f218ca0e788499f8b8ea5ebb9f45ef1",
+          "Name": "OUT",
+          "Description": "Ergebnis des Python-Skripts",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Führt ein eingebettetes Python-Skript aus."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Phython-Standard- und DesignScript-Bibliotheken laden\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Die Eingaben für diesen Block werden in Form einer Liste in den IN-Variablen gespeichert.\r\ndata_list = IN[0]\r\n\r\n# Code unterhalb dieser Linie platzieren\r\n\r\n# Initalisierung\r\ndynamo = True\r\n\r\ncon_overhang = data_list[0][0]\r\nff_overhang = data_list[0][1]\r\nplate_t = data_list[0][2]\r\ngap_hor = data_list[0][3]\r\ngap_ver = data_list[0][4]\r\ne_max = data_list[0][5]\r\n\r\norginPoint_list = []\r\nxDirectionPoint_list = []\r\nyDirectionPoint_list = []\r\nproperty_list = [plate_t]\r\n\r\n# Bereinigung #######################################\r\n\r\ndata_list.pop(0) # Lösche Grunddaten.\r\n\r\nfor floor in data_list: # None Einträge Löschen. Stockwerke ohne Fußbodeneinträge löschen.\r\n    if None in floor or floor[3] == 0 or floor[4] == 0:\r\n        floor.clear()\r\nwhile [] in data_list:\r\n    data_list.remove([])\r\n\r\nfor floor in data_list:\r\n    while floor[-1] == 0:\r\n        floor.pop()\r\n\r\n# Klassen #######################################\r\nclass BKS:\r\n    def __init__(self):\r\n        self.cs = [0, 0, 0]\r\n\r\n    def set_to_world(self):\r\n        self.cs = [0, 0, 0]\r\n\r\n    def set_relativ(self, x=0, y=0, z=0):\r\n        self.cs[0] += x\r\n        self.cs[1] += y\r\n        self.cs[2] += z\r\n        return self.cs\r\n\r\n\r\nbks = BKS()\r\n\r\n\r\nclass Plate:\r\n    def __init__(self, length, width, thickness):\r\n        self.l = length\r\n        self.w = width\r\n        self.t = thickness\r\n        Plate.set_on_point(self, 0, 0, 0, 'mP')\r\n\r\n    def set_on_point(self, x, y, z, pos):\r\n        if pos == 'rP':\r\n            self.orginPoint = [x, y, z]\r\n            self.xDirectionPoint = [x, y, -self.w + z]\r\n            self.yDirectionPoint = [x, -self.l + y, -self.w + z]\r\n        elif pos == 'lP':\r\n            self.orginPoint = [x, y, z]\r\n            self.xDirectionPoint = [x, -self.l + y, z]\r\n            self.yDirectionPoint = [x, -self.l + y, -self.w + z]\r\n        elif pos == 'mP':\r\n            self.orginPoint = [self.l + x, y, z]\r\n            self.xDirectionPoint = [x, y, z]\r\n            self.yDirectionPoint = [x, y, -self.w + z]\r\n        elif pos == 'gP':\r\n            self.orginPoint = [x, self.l + y, z]\r\n            self.xDirectionPoint = [x, y, z]\r\n            self.yDirectionPoint = [self.w + x, y, z]\r\n\r\n    def __repr__(self):\r\n        try:\r\n            return f'{self.l}x{self.w}x{self.t} \\n' \\\r\n                   f'CS: {self.orginPoint}{self.xDirectionPoint}{self.yDirectionPoint}'\r\n        except AttributeError:\r\n            return f'Fehler!: Platte hat noch keine Position'\r\n\r\n# Funktionen #######################################\r\ndef write_dynamo_points(plate):\r\n    if dynamo:\r\n        p1 = plate.orginPoint[0]\r\n        p2 = plate.orginPoint[1]\r\n        p3 = plate.orginPoint[2]\r\n        orginPoint_list.append(Point.ByCoordinates(p1, p2, p3))\r\n\r\n        p1 = plate.xDirectionPoint[0]\r\n        p2 = plate.xDirectionPoint[1]\r\n        p3 = plate.xDirectionPoint[2]\r\n        xDirectionPoint_list.append(Point.ByCoordinates(p1, p2, p3))\r\n\r\n        p1 = plate.yDirectionPoint[0]\r\n        p2 = plate.yDirectionPoint[1]\r\n        p3 = plate.yDirectionPoint[2]\r\n        yDirectionPoint_list.append(Point.ByCoordinates(p1, p2, p3))\r\n    else:\r\n        orginPoint_list.append(plate.orginPoint)\r\n        xDirectionPoint_list.append(plate.xDirectionPoint)\r\n        yDirectionPoint_list.append(plate.yDirectionPoint)\r\n\r\n\r\n################## Main Function ##################\r\nfloor_height = 0\r\nfor floor in data_list:\r\n\r\n    raw_height = floor[4] - floor[3]\r\n    plate_w = raw_height + ff_overhang + con_overhang\r\n    len_a = floor[0] - gap_hor\r\n    len_b = floor[1] - gap_hor * 2\r\n    len_c = floor[2] - gap_hor\r\n    min_l = 0\r\n    existing = {'Plate_A': 0, 'Plate_B': 0, 'Plate_C': 0}\r\n\r\n    if len_a > min_l:\r\n        existing['Plate_A'] = 1\r\n    if len_b > min_l:\r\n        existing['Plate_B'] = 1\r\n    if len_c > min_l:\r\n        existing['Plate_C'] = 1\r\n\r\n    if existing['Plate_A']: # Wenn Platte A Existiert\r\n        # Platte A Erstellen.\r\n        plate_a = Plate(len_a, plate_w, plate_t)\r\n        plate_a.set_on_point(0, 0, floor_height + ff_overhang, 'lP')\r\n        write_dynamo_points(plate_a)\r\n\r\n    if existing['Plate_B']: # Wenn Platte B Existiert\r\n        l_factor = 0\r\n        p_factor = 0\r\n        if existing['Plate_A'] and existing['Plate_C']:\r\n            l_factor = plate_t * 2\r\n            p_factor = plate_t\r\n        elif existing['Plate_A']:\r\n            l_factor = plate_t\r\n            p_factor = plate_t\r\n        elif existing['Plate_C']:\r\n            l_factor = plate_t\r\n        len_b -= l_factor\r\n\r\n        # Platte B Erstellen.\r\n        plate_b = Plate(len_b, plate_w, plate_t)\r\n        plate_b.set_on_point(p_factor, 0, floor_height + ff_overhang, 'mP')\r\n        write_dynamo_points(plate_b)\r\n\r\n        # Konsolen Startpunkte Erstellen.\r\n        div_max = e_max\r\n        div = (len_b - 2 * 150) / ((len_b - 2 * 150) // div_max + 1)\r\n        div_li = [p_factor + 150] # Liste mit Startpunkten für die Konsolen.\r\n\r\n        while div_li[-1] + div < len_b:\r\n            div_li.append(round(div_li[-1] + div, 2))\r\n\r\n        # Konsolen Erstellen. (Aktuelle Baustelle)\r\n        for start_p in div_li:\r\n            kp_h = Plate(250, 150, plate_t)\r\n            kp_h.set_on_point(start_p - kp_h.w/2, 0, floor_height - raw_height + gap_ver, 'gP')\r\n            write_dynamo_points(kp_h)\r\n\r\n            kp_v = Plate(kp_h.l - 20, raw_height - 80 - gap_ver - plate_t, plate_t)\r\n            kp_v.set_on_point(start_p - plate_t/2, kp_v.l, floor_height - 80, 'lP')\r\n            write_dynamo_points(kp_v)\r\n\r\n\r\n    if existing['Plate_C']: # Wenn Platte C Existiert\r\n        p_factor = 3000 # Fiktiver Wert wenn nur die Platte C existiert.\r\n        if existing['Plate_A'] and existing['Plate_B']:\r\n            p_factor = plate_t * 2 + len_b\r\n        elif existing['Plate_B']:\r\n            p_factor = len_b + plate_t\r\n\r\n        # Platte C Erstellen.\r\n        plate_c = Plate(len_c, plate_w, plate_t)\r\n        plate_c.set_on_point(p_factor, 0, floor_height + ff_overhang, 'rP')\r\n        write_dynamo_points(plate_c)\r\n\r\n    floor_height += 3000\r\n\r\n# Weisen Sie Ihre Ausgabe der OUT-Variablen zu.\r\n\r\nOUT = [orginPoint_list, xDirectionPoint_list, yDirectionPoint_list, property_list]\r\n",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "2b5c75f22e734711b0ea9a989b4df900",
+      "Inputs": [
+        {
+          "Id": "fb050bfea218423bb109189e1c0708c4",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8b6d65ae125948a4aa469321bd52fd8a",
+          "Name": "OUT",
+          "Description": "Ergebnis des Python-Skripts",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Führt ein eingebettetes Python-Skript aus."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "",
+      "Id": "e59f43119b5f4cc6b56070294865108a",
+      "Inputs": [],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "Ermöglicht die direkte Erstellung von DesignScript-Code."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "AdvanceSteel.Nodes.Plates.Plate.ByThreePoints@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,AdvanceSteel.Nodes.Property[]",
+      "Id": "a7b32bb887464018931770b1a6dad27e",
+      "Inputs": [
+        {
+          "Id": "6300c933b02b4158a93e6bc055afc5ba",
+          "Name": "orginPoint",
+          "Description": "Input the Origin of the Rectangular Plate\n\nPoint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3b56ffc99007485bab1d0f129a954b8c",
+          "Name": "xDirectionPoint",
+          "Description": "Input Point in the X Direction - distance from orgin will determine the width\n\nPoint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1a23a351d8c84fe89bec88fd388b4425",
+          "Name": "yDirectionPoint",
+          "Description": "Input Point in approximate Y Direction - True Y Direction will get recalculated\n\nPoint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d680e21c27b641c59bef848bf71f1688",
+          "Name": "additionalPlateParameters",
+          "Description": "Optional Input Plate Build Properties\n\nProperty[]\nVorgabewert : null",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f78365aa04374229ad392c04f06ff885",
+          "Name": "plate",
+          "Description": "plate",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create an Advance Steel Plate by 3 Points - Orgin, X Direction and Y Direction (Approx)\n\nPlate.ByThreePoints (orginPoint: Point, xDirectionPoint: Point, yDirectionPoint: Point, additionalPlateParameters: Property[] = null): Plate"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "abc608b7e7214bea8527542eb7d741d6",
+      "Inputs": [
+        {
+          "Id": "5eb1971c7569427ca648eabbe1a0b6e4",
+          "Name": "",
+          "Description": "Block, dessen Ausgabe angezeigt wird",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a6457165d3c8476299984c4aaaebb9c4",
+          "Name": "",
+          "Description": "Blockausgabe",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualisierung der Ausgabe des Blocks"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "dc6315dceab343f9b3f68abedd42439d",
+      "Inputs": [
+        {
+          "Id": "1e0463d738574f16b64a3de4b54c330e",
+          "Name": "",
+          "Description": "Block, dessen Ausgabe angezeigt wird",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0f36a55ec2c94d20ab501054983dc0cd",
+          "Name": "",
+          "Description": "Blockausgabe",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualisierung der Ausgabe des Blocks"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "801dbc6e973441dbb71d6a5bbed60d28",
+      "Inputs": [
+        {
+          "Id": "7d475515a514421f91077dc910944ae6",
+          "Name": "",
+          "Description": "Block, dessen Ausgabe angezeigt wird",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "00641161c0834ddf8b9b22b60d97e391",
+          "Name": "",
+          "Description": "Blockausgabe",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualisierung der Ausgabe des Blocks"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "5739e538b7e34f51ac2aeebf877107d1",
+      "Inputs": [
+        {
+          "Id": "af5c3c0b5e5b4d63a99757da10b3324e",
+          "Name": "",
+          "Description": "Block, dessen Ausgabe angezeigt wird",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "dfc43c276c88463cb484beb63a7fae80",
+          "Name": "",
+          "Description": "Blockausgabe",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualisierung der Ausgabe des Blocks"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "d0f0d83b0e9148b499e287f263fdf488",
+      "End": "a12a280702e4494487a10ec05471ca9f",
+      "Id": "63a5da1190ad4633a380744c5b988374",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f51d673c11ad4e28bfb87f2be4da5775",
+      "End": "bb074ff5c8a74ca5adf266d5de2a92ae",
+      "Id": "c7c6c014766944c1ac1ccd5d059ddc67",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7cd2e4e6b8704d9597c238bc6500cbe1",
+      "End": "54129b71a76f4e7689659d0879c4b4bb",
+      "Id": "f6a72742067c4884aaedd10c368ebd20",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "20421b9cedcd4d94b8ded839143becdf",
+      "End": "a024fa2532d24d3594ce419a4666d7c7",
+      "Id": "97804c1a9fdb448a995a5091103b5dee",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f5babb1cb18b47fa8f173173ecaf9e8d",
+      "End": "ab87c24005a14825ac52a236d3c78716",
+      "Id": "976e2a37c9d74b4fb9267c04add9cde8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "1c6c32266e9b44ed84071e2e587b9cbe",
+      "End": "95cc8e8311d2403fa4ad44a3ca116c6a",
+      "Id": "6a56302d87ed41cc8aade367ab076bf9",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "09e6a8c12bcf47d59d96f73b10b4c1c4",
+      "End": "df1ed0284ae749af9e105b946b3d6821",
+      "Id": "93035b8b047b4a23906df8386399d164",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2f218ca0e788499f8b8ea5ebb9f45ef1",
+      "End": "999346141c4241209f9b854759be2fe4",
+      "Id": "3df0ff2bfd1a4dc791150e34218845c8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a6457165d3c8476299984c4aaaebb9c4",
+      "End": "d680e21c27b641c59bef848bf71f1688",
+      "Id": "62af3c8710a343fcb6cf709bad728bef",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0f36a55ec2c94d20ab501054983dc0cd",
+      "End": "1a23a351d8c84fe89bec88fd388b4425",
+      "Id": "de3865d2778f47a887f8244245af2975",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "00641161c0834ddf8b9b22b60d97e391",
+      "End": "3b56ffc99007485bab1d0f129a954b8c",
+      "Id": "3385bc9882ca4e33bd47788428545117",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "dfc43c276c88463cb484beb63a7fae80",
+      "End": "6300c933b02b4158a93e6bc055afc5ba",
+      "Id": "277c108d4fbc43e388dc4585c7965016",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "Aufmaß Estrichabschlüsse Haus_B.xlsx",
+      "ReferenceType": "External",
+      "Nodes": [
+        "9779abfee86c430283aea71d0d3f9b93"
+      ]
+    }
+  ],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.13",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "Keine",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [
+    {
+      "NodeId": "52d1b38f-3ef0-43f8-bd02-82b823823180",
+      "Binding": {
+        "ByThreePoints_InClassDecl-1_InFunctionScope-1_Instance7_52d1b38f-3ef0-43f8-bd02-82b823823180": "PFNPQVAtRU5WOkVudmVsb3BlIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOnhzZD0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOlNPQVAtRU5DPSJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy9zb2FwL2VuY29kaW5nLyIgeG1sbnM6U09BUC1FTlY9Imh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3NvYXAvZW52ZWxvcGUvIiB4bWxuczpjbHI9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vc29hcC9lbmNvZGluZy9jbHIvMS4wIiBTT0FQLUVOVjplbmNvZGluZ1N0eWxlPSJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy9zb2FwL2VuY29kaW5nLyI+DQo8U09BUC1FTlY6Qm9keT4NCjxhMTpDYWxsU2l0ZV94MDAyQl9UcmFjZVNlcmlhbGlzZXJIZWxwZXIgaWQ9InJlZi0xIiB4bWxuczphMT0iaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS9jbHIvbnNhc3NlbS9Qcm90b0NvcmUvUHJvdG9Db3JlJTJDJTIwVmVyc2lvbiUzRDIuMTMuMS4zODg3JTJDJTIwQ3VsdHVyZSUzRG5ldXRyYWwlMkMlMjBQdWJsaWNLZXlUb2tlbiUzRG51bGwiPg0KPE51bWJlck9mRWxlbWVudHM+MTwvTnVtYmVyT2ZFbGVtZW50cz4NCjxCYXNlLTBfSGFzRGF0YT5mYWxzZTwvQmFzZS0wX0hhc0RhdGE+DQo8QmFzZS0wX0hhc05lc3RlZERhdGE+dHJ1ZTwvQmFzZS0wX0hhc05lc3RlZERhdGE+DQo8QmFzZS0wX05lc3RlZERhdGFDb3VudD4zNjwvQmFzZS0wX05lc3RlZERhdGFDb3VudD4NCjxCYXNlLTAtMF9IYXNEYXRhPnRydWU8L0Jhc2UtMC0wX0hhc0RhdGE+DQo8QmFzZS0wLTBfRGF0YSBpZD0icmVmLTMiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpRelE4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0wX0RhdGE+DQo8QmFzZS0wLTBfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTBfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtMV9IYXNEYXRhPnRydWU8L0Jhc2UtMC0xX0hhc0RhdGE+DQo8QmFzZS0wLTFfRGF0YSBpZD0icmVmLTQiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpRelk4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0xX0RhdGE+DQo8QmFzZS0wLTFfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTFfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtMl9IYXNEYXRhPnRydWU8L0Jhc2UtMC0yX0hhc0RhdGE+DQo8QmFzZS0wLTJfRGF0YSBpZD0icmVmLTUiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpRemc4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0yX0RhdGE+DQo8QmFzZS0wLTJfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTJfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtM19IYXNEYXRhPnRydWU8L0Jhc2UtMC0zX0hhc0RhdGE+DQo8QmFzZS0wLTNfRGF0YSBpZD0icmVmLTYiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpRMEU4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0zX0RhdGE+DQo8QmFzZS0wLTNfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTNfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtNF9IYXNEYXRhPnRydWU8L0Jhc2UtMC00X0hhc0RhdGE+DQo8QmFzZS0wLTRfRGF0YSBpZD0icmVmLTciPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpRME04TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC00X0RhdGE+DQo8QmFzZS0wLTRfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTRfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtNV9IYXNEYXRhPnRydWU8L0Jhc2UtMC01X0hhc0RhdGE+DQo8QmFzZS0wLTVfRGF0YSBpZD0icmVmLTgiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpRMFU4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC01X0RhdGE+DQo8QmFzZS0wLTVfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTVfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtNl9IYXNEYXRhPnRydWU8L0Jhc2UtMC02X0hhc0RhdGE+DQo8QmFzZS0wLTZfRGF0YSBpZD0icmVmLTkiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpSREE4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC02X0RhdGE+DQo8QmFzZS0wLTZfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTZfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtN19IYXNEYXRhPnRydWU8L0Jhc2UtMC03X0hhc0RhdGE+DQo8QmFzZS0wLTdfRGF0YSBpZD0icmVmLTEwIj5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSVlXNWtiR1VnYVdROUluSmxaaTB4SWlCNGJXeHVjenBoTVQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOWpiSEl2Ym5OaGMzTmxiUzlFZVc1aGJXOHVRWEJ3YkdsallYUnBiMjV6TGtGa2RtRnVZMlZUZEdWbGJDNVRaWEoyYVdObGN5OUJaSFpoYm1ObFUzUmxaV3hUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakV3TGpFdU5ERTVOaVV5UXlVeU1FTjFiSFIxY21VbE0wUnVaWFYwY21Gc0pUSkRKVEl3VUhWaWJHbGpTMlY1Vkc5clpXNGxNMFJ1ZFd4c0lqNE5DanhJWVc1a2JHVWdhV1E5SW5KbFppMHpJajR6UkRJOEwwaGhibVJzWlQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNHRnVaR3hsUGcwS1BDOVRUMEZRTFVWT1ZqcENiMlI1UGcwS1BDOVRUMEZRTFVWT1ZqcEZiblpsYkc5d1pUNE5DZz09PC9CYXNlLTAtN19EYXRhPg0KPEJhc2UtMC03X0hhc05lc3RlZERhdGE+ZmFsc2U8L0Jhc2UtMC03X0hhc05lc3RlZERhdGE+DQo8QmFzZS0wLThfSGFzRGF0YT50cnVlPC9CYXNlLTAtOF9IYXNEYXRhPg0KPEJhc2UtMC04X0RhdGEgaWQ9InJlZi0xMSI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVklZVzVrYkdVZ2FXUTlJbkpsWmkweElpQjRiV3h1Y3pwaE1UMGlhSFIwY0RvdkwzTmphR1Z0WVhNdWJXbGpjbTl6YjJaMExtTnZiUzlqYkhJdmJuTmhjM05sYlM5RWVXNWhiVzh1UVhCd2JHbGpZWFJwYjI1ekxrRmtkbUZ1WTJWVGRHVmxiQzVUWlhKMmFXTmxjeTlCWkhaaGJtTmxVM1JsWld4VFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFd0xqRXVOREU1TmlVeVF5VXlNRU4xYkhSMWNtVWxNMFJ1WlhWMGNtRnNKVEpESlRJd1VIVmliR2xqUzJWNVZHOXJaVzRsTTBSdWRXeHNJajROQ2p4SVlXNWtiR1VnYVdROUluSmxaaTB6SWo0elJEUThMMGhoYm1Sc1pUNE5Dand2WVRFNlUyVnlhV0ZzYVhwaFlteGxTR0Z1Wkd4bFBnMEtQQzlUVDBGUUxVVk9WanBDYjJSNVBnMEtQQzlUVDBGUUxVVk9WanBGYm5abGJHOXdaVDROQ2c9PTwvQmFzZS0wLThfRGF0YT4NCjxCYXNlLTAtOF9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtOF9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC05X0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTlfSGFzRGF0YT4NCjxCYXNlLTAtOV9EYXRhIGlkPSJyZWYtMTIiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpSRFk4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC05X0RhdGE+DQo8QmFzZS0wLTlfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTlfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtMTBfSGFzRGF0YT50cnVlPC9CYXNlLTAtMTBfSGFzRGF0YT4NCjxCYXNlLTAtMTBfRGF0YSBpZD0icmVmLTEzIj5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSVlXNWtiR1VnYVdROUluSmxaaTB4SWlCNGJXeHVjenBoTVQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOWpiSEl2Ym5OaGMzTmxiUzlFZVc1aGJXOHVRWEJ3YkdsallYUnBiMjV6TGtGa2RtRnVZMlZUZEdWbGJDNVRaWEoyYVdObGN5OUJaSFpoYm1ObFUzUmxaV3hUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakV3TGpFdU5ERTVOaVV5UXlVeU1FTjFiSFIxY21VbE0wUnVaWFYwY21Gc0pUSkRKVEl3VUhWaWJHbGpTMlY1Vkc5clpXNGxNMFJ1ZFd4c0lqNE5DanhJWVc1a2JHVWdhV1E5SW5KbFppMHpJajR6UkRnOEwwaGhibVJzWlQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNHRnVaR3hsUGcwS1BDOVRUMEZRTFVWT1ZqcENiMlI1UGcwS1BDOVRUMEZRTFVWT1ZqcEZiblpsYkc5d1pUNE5DZz09PC9CYXNlLTAtMTBfRGF0YT4NCjxCYXNlLTAtMTBfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTEwX0hhc05lc3RlZERhdGE+DQo8QmFzZS0wLTExX0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTExX0hhc0RhdGE+DQo8QmFzZS0wLTExX0RhdGEgaWQ9InJlZi0xNCI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVklZVzVrYkdVZ2FXUTlJbkpsWmkweElpQjRiV3h1Y3pwaE1UMGlhSFIwY0RvdkwzTmphR1Z0WVhNdWJXbGpjbTl6YjJaMExtTnZiUzlqYkhJdmJuTmhjM05sYlM5RWVXNWhiVzh1UVhCd2JHbGpZWFJwYjI1ekxrRmtkbUZ1WTJWVGRHVmxiQzVUWlhKMmFXTmxjeTlCWkhaaGJtTmxVM1JsWld4VFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFd0xqRXVOREU1TmlVeVF5VXlNRU4xYkhSMWNtVWxNMFJ1WlhWMGNtRnNKVEpESlRJd1VIVmliR2xqUzJWNVZHOXJaVzRsTTBSdWRXeHNJajROQ2p4SVlXNWtiR1VnYVdROUluSmxaaTB6SWo0elJFRThMMGhoYm1Sc1pUNE5Dand2WVRFNlUyVnlhV0ZzYVhwaFlteGxTR0Z1Wkd4bFBnMEtQQzlUVDBGUUxVVk9WanBDYjJSNVBnMEtQQzlUVDBGUUxVVk9WanBGYm5abGJHOXdaVDROQ2c9PTwvQmFzZS0wLTExX0RhdGE+DQo8QmFzZS0wLTExX0hhc05lc3RlZERhdGE+ZmFsc2U8L0Jhc2UtMC0xMV9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0xMl9IYXNEYXRhPnRydWU8L0Jhc2UtMC0xMl9IYXNEYXRhPg0KPEJhc2UtMC0xMl9EYXRhIGlkPSJyZWYtMTUiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpSRU04TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0xMl9EYXRhPg0KPEJhc2UtMC0xMl9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMTJfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtMTNfSGFzRGF0YT50cnVlPC9CYXNlLTAtMTNfSGFzRGF0YT4NCjxCYXNlLTAtMTNfRGF0YSBpZD0icmVmLTE2Ij5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSVlXNWtiR1VnYVdROUluSmxaaTB4SWlCNGJXeHVjenBoTVQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOWpiSEl2Ym5OaGMzTmxiUzlFZVc1aGJXOHVRWEJ3YkdsallYUnBiMjV6TGtGa2RtRnVZMlZUZEdWbGJDNVRaWEoyYVdObGN5OUJaSFpoYm1ObFUzUmxaV3hUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakV3TGpFdU5ERTVOaVV5UXlVeU1FTjFiSFIxY21VbE0wUnVaWFYwY21Gc0pUSkRKVEl3VUhWaWJHbGpTMlY1Vkc5clpXNGxNMFJ1ZFd4c0lqNE5DanhJWVc1a2JHVWdhV1E5SW5KbFppMHpJajR6UkVVOEwwaGhibVJzWlQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNHRnVaR3hsUGcwS1BDOVRUMEZRTFVWT1ZqcENiMlI1UGcwS1BDOVRUMEZRTFVWT1ZqcEZiblpsYkc5d1pUNE5DZz09PC9CYXNlLTAtMTNfRGF0YT4NCjxCYXNlLTAtMTNfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTEzX0hhc05lc3RlZERhdGE+DQo8QmFzZS0wLTE0X0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTE0X0hhc0RhdGE+DQo8QmFzZS0wLTE0X0RhdGEgaWQ9InJlZi0xNyI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVklZVzVrYkdVZ2FXUTlJbkpsWmkweElpQjRiV3h1Y3pwaE1UMGlhSFIwY0RvdkwzTmphR1Z0WVhNdWJXbGpjbTl6YjJaMExtTnZiUzlqYkhJdmJuTmhjM05sYlM5RWVXNWhiVzh1UVhCd2JHbGpZWFJwYjI1ekxrRmtkbUZ1WTJWVGRHVmxiQzVUWlhKMmFXTmxjeTlCWkhaaGJtTmxVM1JsWld4VFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFd0xqRXVOREU1TmlVeVF5VXlNRU4xYkhSMWNtVWxNMFJ1WlhWMGNtRnNKVEpESlRJd1VIVmliR2xqUzJWNVZHOXJaVzRsTTBSdWRXeHNJajROQ2p4SVlXNWtiR1VnYVdROUluSmxaaTB6SWo0elJUQThMMGhoYm1Sc1pUNE5Dand2WVRFNlUyVnlhV0ZzYVhwaFlteGxTR0Z1Wkd4bFBnMEtQQzlUVDBGUUxVVk9WanBDYjJSNVBnMEtQQzlUVDBGUUxVVk9WanBGYm5abGJHOXdaVDROQ2c9PTwvQmFzZS0wLTE0X0RhdGE+DQo8QmFzZS0wLTE0X0hhc05lc3RlZERhdGE+ZmFsc2U8L0Jhc2UtMC0xNF9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0xNV9IYXNEYXRhPnRydWU8L0Jhc2UtMC0xNV9IYXNEYXRhPg0KPEJhc2UtMC0xNV9EYXRhIGlkPSJyZWYtMTgiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpSVEk4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0xNV9EYXRhPg0KPEJhc2UtMC0xNV9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMTVfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtMTZfSGFzRGF0YT50cnVlPC9CYXNlLTAtMTZfSGFzRGF0YT4NCjxCYXNlLTAtMTZfRGF0YSBpZD0icmVmLTE5Ij5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSVlXNWtiR1VnYVdROUluSmxaaTB4SWlCNGJXeHVjenBoTVQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOWpiSEl2Ym5OaGMzTmxiUzlFZVc1aGJXOHVRWEJ3YkdsallYUnBiMjV6TGtGa2RtRnVZMlZUZEdWbGJDNVRaWEoyYVdObGN5OUJaSFpoYm1ObFUzUmxaV3hUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakV3TGpFdU5ERTVOaVV5UXlVeU1FTjFiSFIxY21VbE0wUnVaWFYwY21Gc0pUSkRKVEl3VUhWaWJHbGpTMlY1Vkc5clpXNGxNMFJ1ZFd4c0lqNE5DanhJWVc1a2JHVWdhV1E5SW5KbFppMHpJajR6UlRROEwwaGhibVJzWlQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNHRnVaR3hsUGcwS1BDOVRUMEZRTFVWT1ZqcENiMlI1UGcwS1BDOVRUMEZRTFVWT1ZqcEZiblpsYkc5d1pUNE5DZz09PC9CYXNlLTAtMTZfRGF0YT4NCjxCYXNlLTAtMTZfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTE2X0hhc05lc3RlZERhdGE+DQo8QmFzZS0wLTE3X0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTE3X0hhc0RhdGE+DQo8QmFzZS0wLTE3X0RhdGEgaWQ9InJlZi0yMCI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVklZVzVrYkdVZ2FXUTlJbkpsWmkweElpQjRiV3h1Y3pwaE1UMGlhSFIwY0RvdkwzTmphR1Z0WVhNdWJXbGpjbTl6YjJaMExtTnZiUzlqYkhJdmJuTmhjM05sYlM5RWVXNWhiVzh1UVhCd2JHbGpZWFJwYjI1ekxrRmtkbUZ1WTJWVGRHVmxiQzVUWlhKMmFXTmxjeTlCWkhaaGJtTmxVM1JsWld4VFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFd0xqRXVOREU1TmlVeVF5VXlNRU4xYkhSMWNtVWxNMFJ1WlhWMGNtRnNKVEpESlRJd1VIVmliR2xqUzJWNVZHOXJaVzRsTTBSdWRXeHNJajROQ2p4SVlXNWtiR1VnYVdROUluSmxaaTB6SWo0elJUWThMMGhoYm1Sc1pUNE5Dand2WVRFNlUyVnlhV0ZzYVhwaFlteGxTR0Z1Wkd4bFBnMEtQQzlUVDBGUUxVVk9WanBDYjJSNVBnMEtQQzlUVDBGUUxVVk9WanBGYm5abGJHOXdaVDROQ2c9PTwvQmFzZS0wLTE3X0RhdGE+DQo8QmFzZS0wLTE3X0hhc05lc3RlZERhdGE+ZmFsc2U8L0Jhc2UtMC0xN19IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0xOF9IYXNEYXRhPnRydWU8L0Jhc2UtMC0xOF9IYXNEYXRhPg0KPEJhc2UtMC0xOF9EYXRhIGlkPSJyZWYtMjEiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpSVGc4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0xOF9EYXRhPg0KPEJhc2UtMC0xOF9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMThfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtMTlfSGFzRGF0YT50cnVlPC9CYXNlLTAtMTlfSGFzRGF0YT4NCjxCYXNlLTAtMTlfRGF0YSBpZD0icmVmLTIyIj5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSVlXNWtiR1VnYVdROUluSmxaaTB4SWlCNGJXeHVjenBoTVQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOWpiSEl2Ym5OaGMzTmxiUzlFZVc1aGJXOHVRWEJ3YkdsallYUnBiMjV6TGtGa2RtRnVZMlZUZEdWbGJDNVRaWEoyYVdObGN5OUJaSFpoYm1ObFUzUmxaV3hUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakV3TGpFdU5ERTVOaVV5UXlVeU1FTjFiSFIxY21VbE0wUnVaWFYwY21Gc0pUSkRKVEl3VUhWaWJHbGpTMlY1Vkc5clpXNGxNMFJ1ZFd4c0lqNE5DanhJWVc1a2JHVWdhV1E5SW5KbFppMHpJajR6UlVFOEwwaGhibVJzWlQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNHRnVaR3hsUGcwS1BDOVRUMEZRTFVWT1ZqcENiMlI1UGcwS1BDOVRUMEZRTFVWT1ZqcEZiblpsYkc5d1pUNE5DZz09PC9CYXNlLTAtMTlfRGF0YT4NCjxCYXNlLTAtMTlfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTE5X0hhc05lc3RlZERhdGE+DQo8QmFzZS0wLTIwX0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTIwX0hhc0RhdGE+DQo8QmFzZS0wLTIwX0RhdGEgaWQ9InJlZi0yMyI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVklZVzVrYkdVZ2FXUTlJbkpsWmkweElpQjRiV3h1Y3pwaE1UMGlhSFIwY0RvdkwzTmphR1Z0WVhNdWJXbGpjbTl6YjJaMExtTnZiUzlqYkhJdmJuTmhjM05sYlM5RWVXNWhiVzh1UVhCd2JHbGpZWFJwYjI1ekxrRmtkbUZ1WTJWVGRHVmxiQzVUWlhKMmFXTmxjeTlCWkhaaGJtTmxVM1JsWld4VFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFd0xqRXVOREU1TmlVeVF5VXlNRU4xYkhSMWNtVWxNMFJ1WlhWMGNtRnNKVEpESlRJd1VIVmliR2xqUzJWNVZHOXJaVzRsTTBSdWRXeHNJajROQ2p4SVlXNWtiR1VnYVdROUluSmxaaTB6SWo0elJVTThMMGhoYm1Sc1pUNE5Dand2WVRFNlUyVnlhV0ZzYVhwaFlteGxTR0Z1Wkd4bFBnMEtQQzlUVDBGUUxVVk9WanBDYjJSNVBnMEtQQzlUVDBGUUxVVk9WanBGYm5abGJHOXdaVDROQ2c9PTwvQmFzZS0wLTIwX0RhdGE+DQo8QmFzZS0wLTIwX0hhc05lc3RlZERhdGE+ZmFsc2U8L0Jhc2UtMC0yMF9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0yMV9IYXNEYXRhPnRydWU8L0Jhc2UtMC0yMV9IYXNEYXRhPg0KPEJhc2UtMC0yMV9EYXRhIGlkPSJyZWYtMjQiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpSVVU4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0yMV9EYXRhPg0KPEJhc2UtMC0yMV9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMjFfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtMjJfSGFzRGF0YT50cnVlPC9CYXNlLTAtMjJfSGFzRGF0YT4NCjxCYXNlLTAtMjJfRGF0YSBpZD0icmVmLTI1Ij5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSVlXNWtiR1VnYVdROUluSmxaaTB4SWlCNGJXeHVjenBoTVQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOWpiSEl2Ym5OaGMzTmxiUzlFZVc1aGJXOHVRWEJ3YkdsallYUnBiMjV6TGtGa2RtRnVZMlZUZEdWbGJDNVRaWEoyYVdObGN5OUJaSFpoYm1ObFUzUmxaV3hUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakV3TGpFdU5ERTVOaVV5UXlVeU1FTjFiSFIxY21VbE0wUnVaWFYwY21Gc0pUSkRKVEl3VUhWaWJHbGpTMlY1Vkc5clpXNGxNMFJ1ZFd4c0lqNE5DanhJWVc1a2JHVWdhV1E5SW5KbFppMHpJajR6UmpBOEwwaGhibVJzWlQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNHRnVaR3hsUGcwS1BDOVRUMEZRTFVWT1ZqcENiMlI1UGcwS1BDOVRUMEZRTFVWT1ZqcEZiblpsYkc5d1pUNE5DZz09PC9CYXNlLTAtMjJfRGF0YT4NCjxCYXNlLTAtMjJfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTIyX0hhc05lc3RlZERhdGE+DQo8QmFzZS0wLTIzX0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTIzX0hhc0RhdGE+DQo8QmFzZS0wLTIzX0RhdGEgaWQ9InJlZi0yNiI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVklZVzVrYkdVZ2FXUTlJbkpsWmkweElpQjRiV3h1Y3pwaE1UMGlhSFIwY0RvdkwzTmphR1Z0WVhNdWJXbGpjbTl6YjJaMExtTnZiUzlqYkhJdmJuTmhjM05sYlM5RWVXNWhiVzh1UVhCd2JHbGpZWFJwYjI1ekxrRmtkbUZ1WTJWVGRHVmxiQzVUWlhKMmFXTmxjeTlCWkhaaGJtTmxVM1JsWld4VFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFd0xqRXVOREU1TmlVeVF5VXlNRU4xYkhSMWNtVWxNMFJ1WlhWMGNtRnNKVEpESlRJd1VIVmliR2xqUzJWNVZHOXJaVzRsTTBSdWRXeHNJajROQ2p4SVlXNWtiR1VnYVdROUluSmxaaTB6SWo0elJqSThMMGhoYm1Sc1pUNE5Dand2WVRFNlUyVnlhV0ZzYVhwaFlteGxTR0Z1Wkd4bFBnMEtQQzlUVDBGUUxVVk9WanBDYjJSNVBnMEtQQzlUVDBGUUxVVk9WanBGYm5abGJHOXdaVDROQ2c9PTwvQmFzZS0wLTIzX0RhdGE+DQo8QmFzZS0wLTIzX0hhc05lc3RlZERhdGE+ZmFsc2U8L0Jhc2UtMC0yM19IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0yNF9IYXNEYXRhPnRydWU8L0Jhc2UtMC0yNF9IYXNEYXRhPg0KPEJhc2UtMC0yNF9EYXRhIGlkPSJyZWYtMjciPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpSalE4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0yNF9EYXRhPg0KPEJhc2UtMC0yNF9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMjRfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtMjVfSGFzRGF0YT50cnVlPC9CYXNlLTAtMjVfSGFzRGF0YT4NCjxCYXNlLTAtMjVfRGF0YSBpZD0icmVmLTI4Ij5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSVlXNWtiR1VnYVdROUluSmxaaTB4SWlCNGJXeHVjenBoTVQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOWpiSEl2Ym5OaGMzTmxiUzlFZVc1aGJXOHVRWEJ3YkdsallYUnBiMjV6TGtGa2RtRnVZMlZUZEdWbGJDNVRaWEoyYVdObGN5OUJaSFpoYm1ObFUzUmxaV3hUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakV3TGpFdU5ERTVOaVV5UXlVeU1FTjFiSFIxY21VbE0wUnVaWFYwY21Gc0pUSkRKVEl3VUhWaWJHbGpTMlY1Vkc5clpXNGxNMFJ1ZFd4c0lqNE5DanhJWVc1a2JHVWdhV1E5SW5KbFppMHpJajR6UmpZOEwwaGhibVJzWlQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNHRnVaR3hsUGcwS1BDOVRUMEZRTFVWT1ZqcENiMlI1UGcwS1BDOVRUMEZRTFVWT1ZqcEZiblpsYkc5d1pUNE5DZz09PC9CYXNlLTAtMjVfRGF0YT4NCjxCYXNlLTAtMjVfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTI1X0hhc05lc3RlZERhdGE+DQo8QmFzZS0wLTI2X0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTI2X0hhc0RhdGE+DQo8QmFzZS0wLTI2X0RhdGEgaWQ9InJlZi0yOSI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVklZVzVrYkdVZ2FXUTlJbkpsWmkweElpQjRiV3h1Y3pwaE1UMGlhSFIwY0RvdkwzTmphR1Z0WVhNdWJXbGpjbTl6YjJaMExtTnZiUzlqYkhJdmJuTmhjM05sYlM5RWVXNWhiVzh1UVhCd2JHbGpZWFJwYjI1ekxrRmtkbUZ1WTJWVGRHVmxiQzVUWlhKMmFXTmxjeTlCWkhaaGJtTmxVM1JsWld4VFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFd0xqRXVOREU1TmlVeVF5VXlNRU4xYkhSMWNtVWxNMFJ1WlhWMGNtRnNKVEpESlRJd1VIVmliR2xqUzJWNVZHOXJaVzRsTTBSdWRXeHNJajROQ2p4SVlXNWtiR1VnYVdROUluSmxaaTB6SWo0elJqZzhMMGhoYm1Sc1pUNE5Dand2WVRFNlUyVnlhV0ZzYVhwaFlteGxTR0Z1Wkd4bFBnMEtQQzlUVDBGUUxVVk9WanBDYjJSNVBnMEtQQzlUVDBGUUxVVk9WanBGYm5abGJHOXdaVDROQ2c9PTwvQmFzZS0wLTI2X0RhdGE+DQo8QmFzZS0wLTI2X0hhc05lc3RlZERhdGE+ZmFsc2U8L0Jhc2UtMC0yNl9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0yN19IYXNEYXRhPnRydWU8L0Jhc2UtMC0yN19IYXNEYXRhPg0KPEJhc2UtMC0yN19EYXRhIGlkPSJyZWYtMzAiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNHpSa0U4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0yN19EYXRhPg0KPEJhc2UtMC0yN19IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMjdfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtMjhfSGFzRGF0YT50cnVlPC9CYXNlLTAtMjhfSGFzRGF0YT4NCjxCYXNlLTAtMjhfRGF0YSBpZD0icmVmLTMxIj5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSVlXNWtiR1VnYVdROUluSmxaaTB4SWlCNGJXeHVjenBoTVQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOWpiSEl2Ym5OaGMzTmxiUzlFZVc1aGJXOHVRWEJ3YkdsallYUnBiMjV6TGtGa2RtRnVZMlZUZEdWbGJDNVRaWEoyYVdObGN5OUJaSFpoYm1ObFUzUmxaV3hUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakV3TGpFdU5ERTVOaVV5UXlVeU1FTjFiSFIxY21VbE0wUnVaWFYwY21Gc0pUSkRKVEl3VUhWaWJHbGpTMlY1Vkc5clpXNGxNMFJ1ZFd4c0lqNE5DanhJWVc1a2JHVWdhV1E5SW5KbFppMHpJajR6UmtNOEwwaGhibVJzWlQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNHRnVaR3hsUGcwS1BDOVRUMEZRTFVWT1ZqcENiMlI1UGcwS1BDOVRUMEZRTFVWT1ZqcEZiblpsYkc5d1pUNE5DZz09PC9CYXNlLTAtMjhfRGF0YT4NCjxCYXNlLTAtMjhfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTI4X0hhc05lc3RlZERhdGE+DQo8QmFzZS0wLTI5X0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTI5X0hhc0RhdGE+DQo8QmFzZS0wLTI5X0RhdGEgaWQ9InJlZi0zMiI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVklZVzVrYkdVZ2FXUTlJbkpsWmkweElpQjRiV3h1Y3pwaE1UMGlhSFIwY0RvdkwzTmphR1Z0WVhNdWJXbGpjbTl6YjJaMExtTnZiUzlqYkhJdmJuTmhjM05sYlM5RWVXNWhiVzh1UVhCd2JHbGpZWFJwYjI1ekxrRmtkbUZ1WTJWVGRHVmxiQzVUWlhKMmFXTmxjeTlCWkhaaGJtTmxVM1JsWld4VFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFd0xqRXVOREU1TmlVeVF5VXlNRU4xYkhSMWNtVWxNMFJ1WlhWMGNtRnNKVEpESlRJd1VIVmliR2xqUzJWNVZHOXJaVzRsTTBSdWRXeHNJajROQ2p4SVlXNWtiR1VnYVdROUluSmxaaTB6SWo0elJrVThMMGhoYm1Sc1pUNE5Dand2WVRFNlUyVnlhV0ZzYVhwaFlteGxTR0Z1Wkd4bFBnMEtQQzlUVDBGUUxVVk9WanBDYjJSNVBnMEtQQzlUVDBGUUxVVk9WanBGYm5abGJHOXdaVDROQ2c9PTwvQmFzZS0wLTI5X0RhdGE+DQo8QmFzZS0wLTI5X0hhc05lc3RlZERhdGE+ZmFsc2U8L0Jhc2UtMC0yOV9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0zMF9IYXNEYXRhPnRydWU8L0Jhc2UtMC0zMF9IYXNEYXRhPg0KPEJhc2UtMC0zMF9EYXRhIGlkPSJyZWYtMzMiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNDBNREE4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0zMF9EYXRhPg0KPEJhc2UtMC0zMF9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMzBfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtMzFfSGFzRGF0YT50cnVlPC9CYXNlLTAtMzFfSGFzRGF0YT4NCjxCYXNlLTAtMzFfRGF0YSBpZD0icmVmLTM0Ij5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSVlXNWtiR1VnYVdROUluSmxaaTB4SWlCNGJXeHVjenBoTVQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOWpiSEl2Ym5OaGMzTmxiUzlFZVc1aGJXOHVRWEJ3YkdsallYUnBiMjV6TGtGa2RtRnVZMlZUZEdWbGJDNVRaWEoyYVdObGN5OUJaSFpoYm1ObFUzUmxaV3hUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakV3TGpFdU5ERTVOaVV5UXlVeU1FTjFiSFIxY21VbE0wUnVaWFYwY21Gc0pUSkRKVEl3VUhWaWJHbGpTMlY1Vkc5clpXNGxNMFJ1ZFd4c0lqNE5DanhJWVc1a2JHVWdhV1E5SW5KbFppMHpJajQwTURJOEwwaGhibVJzWlQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNHRnVaR3hsUGcwS1BDOVRUMEZRTFVWT1ZqcENiMlI1UGcwS1BDOVRUMEZRTFVWT1ZqcEZiblpsYkc5d1pUNE5DZz09PC9CYXNlLTAtMzFfRGF0YT4NCjxCYXNlLTAtMzFfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTMxX0hhc05lc3RlZERhdGE+DQo8QmFzZS0wLTMyX0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTMyX0hhc0RhdGE+DQo8QmFzZS0wLTMyX0RhdGEgaWQ9InJlZi0zNSI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVklZVzVrYkdVZ2FXUTlJbkpsWmkweElpQjRiV3h1Y3pwaE1UMGlhSFIwY0RvdkwzTmphR1Z0WVhNdWJXbGpjbTl6YjJaMExtTnZiUzlqYkhJdmJuTmhjM05sYlM5RWVXNWhiVzh1UVhCd2JHbGpZWFJwYjI1ekxrRmtkbUZ1WTJWVGRHVmxiQzVUWlhKMmFXTmxjeTlCWkhaaGJtTmxVM1JsWld4VFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFd0xqRXVOREU1TmlVeVF5VXlNRU4xYkhSMWNtVWxNMFJ1WlhWMGNtRnNKVEpESlRJd1VIVmliR2xqUzJWNVZHOXJaVzRsTTBSdWRXeHNJajROQ2p4SVlXNWtiR1VnYVdROUluSmxaaTB6SWo0ME1EUThMMGhoYm1Sc1pUNE5Dand2WVRFNlUyVnlhV0ZzYVhwaFlteGxTR0Z1Wkd4bFBnMEtQQzlUVDBGUUxVVk9WanBDYjJSNVBnMEtQQzlUVDBGUUxVVk9WanBGYm5abGJHOXdaVDROQ2c9PTwvQmFzZS0wLTMyX0RhdGE+DQo8QmFzZS0wLTMyX0hhc05lc3RlZERhdGE+ZmFsc2U8L0Jhc2UtMC0zMl9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0zM19IYXNEYXRhPnRydWU8L0Jhc2UtMC0zM19IYXNEYXRhPg0KPEJhc2UtMC0zM19EYXRhIGlkPSJyZWYtMzYiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZJWVc1a2JHVWdhV1E5SW5KbFppMHhJaUI0Yld4dWN6cGhNVDBpYUhSMGNEb3ZMM05qYUdWdFlYTXViV2xqY205emIyWjBMbU52YlM5amJISXZibk5oYzNObGJTOUVlVzVoYlc4dVFYQndiR2xqWVhScGIyNXpMa0ZrZG1GdVkyVlRkR1ZsYkM1VFpYSjJhV05sY3k5QlpIWmhibU5sVTNSbFpXeFRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXdMakV1TkRFNU5pVXlReVV5TUVOMWJIUjFjbVVsTTBSdVpYVjBjbUZzSlRKREpUSXdVSFZpYkdsalMyVjVWRzlyWlc0bE0wUnVkV3hzSWo0TkNqeElZVzVrYkdVZ2FXUTlJbkpsWmkweklqNDBNRFk4TDBoaGJtUnNaVDROQ2p3dllURTZVMlZ5YVdGc2FYcGhZbXhsU0dGdVpHeGxQZzBLUEM5VFQwRlFMVVZPVmpwQ2IyUjVQZzBLUEM5VFQwRlFMVVZPVmpwRmJuWmxiRzl3WlQ0TkNnPT08L0Jhc2UtMC0zM19EYXRhPg0KPEJhc2UtMC0zM19IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMzNfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtMzRfSGFzRGF0YT50cnVlPC9CYXNlLTAtMzRfSGFzRGF0YT4NCjxCYXNlLTAtMzRfRGF0YSBpZD0icmVmLTM3Ij5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSVlXNWtiR1VnYVdROUluSmxaaTB4SWlCNGJXeHVjenBoTVQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOWpiSEl2Ym5OaGMzTmxiUzlFZVc1aGJXOHVRWEJ3YkdsallYUnBiMjV6TGtGa2RtRnVZMlZUZEdWbGJDNVRaWEoyYVdObGN5OUJaSFpoYm1ObFUzUmxaV3hUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakV3TGpFdU5ERTVOaVV5UXlVeU1FTjFiSFIxY21VbE0wUnVaWFYwY21Gc0pUSkRKVEl3VUhWaWJHbGpTMlY1Vkc5clpXNGxNMFJ1ZFd4c0lqNE5DanhJWVc1a2JHVWdhV1E5SW5KbFppMHpJajQwTURnOEwwaGhibVJzWlQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNHRnVaR3hsUGcwS1BDOVRUMEZRTFVWT1ZqcENiMlI1UGcwS1BDOVRUMEZRTFVWT1ZqcEZiblpsYkc5d1pUNE5DZz09PC9CYXNlLTAtMzRfRGF0YT4NCjxCYXNlLTAtMzRfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTM0X0hhc05lc3RlZERhdGE+DQo8QmFzZS0wLTM1X0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTM1X0hhc0RhdGE+DQo8QmFzZS0wLTM1X0RhdGEgaWQ9InJlZi0zOCI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVklZVzVrYkdVZ2FXUTlJbkpsWmkweElpQjRiV3h1Y3pwaE1UMGlhSFIwY0RvdkwzTmphR1Z0WVhNdWJXbGpjbTl6YjJaMExtTnZiUzlqYkhJdmJuTmhjM05sYlM5RWVXNWhiVzh1UVhCd2JHbGpZWFJwYjI1ekxrRmtkbUZ1WTJWVGRHVmxiQzVUWlhKMmFXTmxjeTlCWkhaaGJtTmxVM1JsWld4VFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFd0xqRXVOREU1TmlVeVF5VXlNRU4xYkhSMWNtVWxNMFJ1WlhWMGNtRnNKVEpESlRJd1VIVmliR2xqUzJWNVZHOXJaVzRsTTBSdWRXeHNJajROQ2p4SVlXNWtiR1VnYVdROUluSmxaaTB6SWo0ME1FRThMMGhoYm1Sc1pUNE5Dand2WVRFNlUyVnlhV0ZzYVhwaFlteGxTR0Z1Wkd4bFBnMEtQQzlUVDBGUUxVVk9WanBDYjJSNVBnMEtQQzlUVDBGUUxVVk9WanBGYm5abGJHOXdaVDROQ2c9PTwvQmFzZS0wLTM1X0RhdGE+DQo8QmFzZS0wLTM1X0hhc05lc3RlZERhdGE+ZmFsc2U8L0Jhc2UtMC0zNV9IYXNOZXN0ZWREYXRhPg0KPC9hMTpDYWxsU2l0ZV94MDAyQl9UcmFjZVNlcmlhbGlzZXJIZWxwZXI+DQo8L1NPQVAtRU5WOkJvZHk+DQo8L1NPQVAtRU5WOkVudmVsb3BlPg0K"
+      }
+    }
+  ],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 10000.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.13.1.3887",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Hintergrundvorschau",
+      "EyeX": -338.4874267578125,
+      "EyeY": 836.61077880859375,
+      "EyeZ": 1548.02783203125,
+      "LookX": 835.8779296875,
+      "LookY": -780.38067626953125,
+      "LookZ": -1178.10693359375,
+      "UpX": 0.1594986617565155,
+      "UpY": 0.9612618088722229,
+      "UpZ": -0.22480191290378571
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Name": "Code Block",
+        "ShowGeometry": true,
+        "Id": "52d1b38f3ef043f8bd0282b823823180",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 597.21087092119581,
+        "Y": 593.73313630514042
+      },
+      {
+        "Name": "Version 1",
+        "ShowGeometry": false,
+        "Id": "b318a227b0d44f00b7bd8308eb487215",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": -246.55676624473261,
+        "Y": 316.34899951510062
+      },
+      {
+        "Name": "Version 2",
+        "ShowGeometry": false,
+        "Id": "14282ee30e7044ae9877fde5332460cd",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": -236.08077648049345,
+        "Y": 524.65327368942519
+      },
+      {
+        "Name": "Data.ImportExcel",
+        "ShowGeometry": true,
+        "Id": "d1c8f4a16b7c4187962a10e3ffae0816",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -1251.4110883089434,
+        "Y": 299.94845490435421
+      },
+      {
+        "Name": "File Path",
+        "ShowGeometry": true,
+        "Id": "9779abfee86c430283aea71d0d3f9b93",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -5694.56049353701,
+        "Y": 300.32017215513923
+      },
+      {
+        "Name": "String",
+        "ShowGeometry": true,
+        "Id": "bbbbafee41b2460091fba15cd529ae8e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -1528.1549462326404,
+        "Y": 350.04398426662419
+      },
+      {
+        "Name": "File From Path",
+        "ShowGeometry": true,
+        "Id": "0a766d89407d4bafa0a984467b5591b0",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -1526.1848299252997,
+        "Y": 162.47701669961691
+      },
+      {
+        "Name": "Zeige Datei",
+        "ShowGeometry": true,
+        "Id": "cdce59c83b5a4f0ebae960e5df77177c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -5157.79964099719,
+        "Y": 470.477184987264
+      },
+      {
+        "Name": "Watch",
+        "ShowGeometry": true,
+        "Id": "dc6e6283b0e74203acf1846e41fb44d3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 34.81382202795146,
+        "Y": 564.98942905075728
+      },
+      {
+        "Name": "Watch",
+        "ShowGeometry": true,
+        "Id": "70344cecc71045c6ba21eeee64d83d33",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -872.71076578507439,
+        "Y": 322.86557328246323
+      },
+      {
+        "Name": "Version 4",
+        "ShowGeometry": true,
+        "Id": "c49ca2cd0c594f97835dfe18cd51a33f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -236.25044587804086,
+        "Y": 901.45490700890355
+      },
+      {
+        "Name": "Version 3",
+        "ShowGeometry": false,
+        "Id": "2b5c75f22e734711b0ea9a989b4df900",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": -225.00648042366959,
+        "Y": 698.26731879868316
+      },
+      {
+        "Name": "Code Block",
+        "ShowGeometry": true,
+        "Id": "e59f43119b5f4cc6b56070294865108a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -585.0,
+        "Y": 868.0
+      },
+      {
+        "Name": "Plate.ByThreePoints",
+        "ShowGeometry": true,
+        "Id": "a7b32bb887464018931770b1a6dad27e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": 2122.50286656623,
+        "Y": 661.876648129089
+      },
+      {
+        "Name": "Watch",
+        "ShowGeometry": true,
+        "Id": "abc608b7e7214bea8527542eb7d741d6",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1497.91766236689,
+        "Y": 1339.92613734445
+      },
+      {
+        "Name": "Watch",
+        "ShowGeometry": true,
+        "Id": "dc6315dceab343f9b3f68abedd42439d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1471.17511415458,
+        "Y": 1000.25642392289
+      },
+      {
+        "Name": "Watch",
+        "ShowGeometry": true,
+        "Id": "801dbc6e973441dbb71d6a5bbed60d28",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1479.47842625581,
+        "Y": 681.098971562711
+      },
+      {
+        "Name": "Watch",
+        "ShowGeometry": true,
+        "Id": "5739e538b7e34f51ac2aeebf877107d1",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1448.46040089381,
+        "Y": 365.567315406175
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "c3fa8040b35a48de86cefd45e91cdfe9",
+        "Title": "Estrichabschluss Datei wählen.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "9779abfee86c430283aea71d0d3f9b93",
+          "cdce59c83b5a4f0ebae960e5df77177c"
+        ],
+        "HasNestedGroups": false,
+        "Left": -5704.56049353701,
+        "Top": 226.98683882180589,
+        "Width": 824.0,
+        "Height": 375.15701283212479,
+        "FontSize": 36.0,
+        "InitialTop": 300.32017215513923,
+        "InitialHeight": 315.15701283212485,
+        "TextblockHeight": 63.333333333333336,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": 4825.16424257318,
+    "Y": 414.38374586459292,
+    "Zoom": 0.82079853017411553
+  }
+}
